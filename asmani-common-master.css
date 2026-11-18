@@ -1,0 +1,457 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+=========================================================
+ ASMANI KITAB - COMMON MASTER CSS
+ For: https://divineword4u.blogspot.com/
+ Purpose: Shared stylesheet for all Bible chapter pages
+ File: asmani-common-master.css
+
+ IMPORTANT:
+ 1. Load Noto Serif Bengali once from the Blogger Theme <head>.
+ 2. Link this CSS once from the Blogger Theme <head>.
+ 3. Keep only the chapter HTML in each Blogger page.
+ 4. Keep the outer wrapper: <div class="bible-master">.
+=========================================================
+*/
+
+/* ---------- 01. DESIGN TOKENS ---------- */
+:root {
+  --ak-primary: #245b43;
+  --ak-primary-dark: #17432f;
+  --ak-gold: #b58a45;
+  --ak-text: #303630;
+  --ak-muted: #777777;
+  --ak-border: #e5eae5;
+  --ak-light: #f6f9f6;
+  --ak-white: #ffffff;
+  --ak-font: "Noto Serif Bengali", "SolaimanLipi", "Kalpurush", serif;
+}
+
+/* ---------- 02. CHAPTER PAGE BASE ---------- */
+.bible-master,
+.bible-master * {
+  box-sizing: border-box;
+}
+
+.bible-master {
+  /* Backward-compatible aliases for any retained page-specific CSS */
+  --primary: var(--ak-primary);
+  --primary-dark: var(--ak-primary-dark);
+  --gold: var(--ak-gold);
+  --text: var(--ak-text);
+  --muted: var(--ak-muted);
+  --border: var(--ak-border);
+  --light: var(--ak-light);
+
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+
+  color: var(--ak-text);
+  background: var(--ak-white);
+
+  font-family: var(--ak-font);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.9;
+
+  overflow-wrap: break-word;
+}
+
+/* ---------- 03. PREVIOUS / NEXT NAVIGATION ---------- */
+.bible-master .bible-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.bible-master .bible-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 43px;
+  padding: 7px 16px;
+
+  color: var(--ak-white) !important;
+  background: var(--ak-primary);
+  border: 1px solid var(--ak-primary);
+  border-radius: 7px;
+
+  font-family: var(--ak-font);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none !important;
+
+  transition: background-color 0.15s ease;
+}
+
+.bible-master .bible-nav a:hover {
+  background: var(--ak-primary-dark);
+  border-color: var(--ak-primary-dark);
+}
+
+
+
+
+
