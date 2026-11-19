@@ -7,7 +7,7 @@
 .bible-master .bible-nav a:hover{color:#ffffff!important;background:var(--ak-primary-dark);border-color:var(--ak-primary-dark)}
 .bible-master .bible-nav .arrow{font-family:Arial,sans-serif;font-size:22px;line-height:1}
 .bible-master a:focus-visible{outline:2px solid var(--ak-gold);outline-offset:3px}
-.bible-master .bible-title{text-align:center;margin:25px 0;padding:20px 10px;border-top:1px solid var(--ak-border);border-bottom:1px solid var(--ak-border)}
+.bible-master .bible-title{text-align:center;margin:0px 0;padding:20px 10px;border-top:1px solid var(--ak-border);border-bottom:1px solid var(--ak-border)}
 .bible-master .bible-title h1,.bible-master .bible-title h3:first-child{margin:0;padding:0;color:var(--ak-primary);font-family:var(--ak-font);font-size:28px;font-weight:700;line-height:1.6}
 .bible-master .bible-title h2,.bible-master .bible-title h3:nth-of-type(2){margin:5px 0 0!important;padding:0;color:#555555;font-family:var(--ak-font);font-size:21px;font-weight:600;line-height:1.6}
 .bible-master .title-decoration{width:55px;height:3px;margin:13px auto 0;background:var(--ak-gold);border-radius:5px}
