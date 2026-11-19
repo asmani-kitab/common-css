@@ -1,12 +1,3 @@
-
-/* =================================================
-   ASMANI KITAB MASTER JAVASCRIPT
-   Bengali Safe | Fast Loading | Chapter Cache
-================================================= */
-
-
-/* ===== ১. Blogger HTML উপাদান সংগ্রহ ===== */
-
 var bookSelect = document.getElementById("am-book");
 var chapterSelect = document.getElementById("am-chapter");
 var verseInput = document.getElementById("am-verse");
@@ -21,7 +12,7 @@ if (!bookSelect || !chapterSelect || !verseInput ||
 }
 
 
-/* ===== ২. Cache ও Fetch নিয়ন্ত্রণ ===== */
+/* ===== গতি বাড়ানোর জন্য Cache ও Fetch নিয়ন্ত্রণ ===== */
 
 var chapterCache = new Map();
 var CACHE_LIMIT = 8;
@@ -29,8 +20,12 @@ var CACHE_LIMIT = 8;
 var activeController = null;
 var requestId = 0;
 
-
-/* ===== ৩. বাংলা HTML Entity ঠিক করা ===== */
+/* =====================================================
+   বাংলা লেখা / HTML Entity ঠিক করার ফাংশন
+   Blogger কোনো বাংলা লেখাকে &#...; আকারে সংরক্ষণ করলে
+   এই ফাংশন সেটিকে আবার স্বাভাবিক বাংলা অক্ষরে রূপান্তর করে।
+   একাধিকবার encode হয়ে গেলেও সর্বোচ্চ 4 ধাপে ঠিক করবে।
+===================================================== */
 
 function decodeHtmlText(value) {
   var textarea = document.createElement("textarea");
@@ -38,10 +33,11 @@ function decodeHtmlText(value) {
 
   for (var i = 0; i < 4; i++) {
     textarea.innerHTML = result;
-
     var decoded = textarea.value;
 
-    if (decoded === result) break;
+    if (decoded === result) {
+      break;
+    }
 
     result = decoded;
   }
@@ -50,16 +46,18 @@ function decodeHtmlText(value) {
 }
 
 
-/* ===== ৪. বাংলা ও আরবি অঙ্ককে ইংরেজি করা ===== */
+/* বাংলা ও আরবি অঙ্ককে ইংরেজি অঙ্কে রূপান্তর */
 
 function toEnglishDigits(value) {
   var digits = "০১২৩৪৫৬৭৮৯";
   var arabic = "٠١٢٣٤٥٦٧٨٩";
 
-  return String(value).replace(/[০-৯٠-٩]/g, function(digit) {
+  return String(value).replace(/[০-৯٠-٩]/g, function (digit) {
     var index = digits.indexOf(digit);
 
-    if (index !== -1) return String(index);
+    if (index !== -1) {
+      return String(index);
+    }
 
     index = arabic.indexOf(digit);
 
@@ -68,16 +66,16 @@ function toEnglishDigits(value) {
 }
 
 
-/* ===== ৫. ইংরেজি অঙ্ককে বাংলা করা ===== */
+/* ইংরেজি অঙ্ককে বাংলা অঙ্কে রূপান্তর */
 
 function toBengaliDigits(value) {
-  return String(value).replace(/[0-9]/g, function(digit) {
+  return String(value).replace(/[0-9]/g, function (digit) {
     return "০১২৩৪৫৬৭৮৯".charAt(Number(digit));
   });
 }
 
 
-/* ===== ৬. Status বার্তা ===== */
+/* বার্তা দেখানোর ব্যবস্থা */
 
 function showStatus(message) {
   statusBox.textContent = message;
@@ -90,104 +88,89 @@ function clearStatus() {
 }
 
 
-/* ===== ৭. কিতাবের ড্রপডাউন তৈরি ===== */
+/* কিতাবের তালিকা তৈরি */
 
 function populateBooks() {
-  bookSelect.innerHTML = "";
+  /* HTML-এ থাকা প্রাথমিক অপশনও নিরাপদভাবে বাংলা করে বসানো হচ্ছে */
+  var initialBookOption = bookSelect.querySelector('option[value=""]');
+  if (initialBookOption) {
+    initialBookOption.textContent = decodeHtmlText("— কিতাব নির্বাচন করুন —");
+  }
 
-  var firstOption = document.createElement("option");
+  var initialChapterOption = chapterSelect.querySelector('option[value=""]');
+  if (initialChapterOption) {
+    initialChapterOption.textContent = decodeHtmlText("— প্রথমে কিতাব নির্বাচন করুন —");
+  }
 
-  firstOption.value = "";
-  firstOption.textContent =
-    decodeHtmlText("— কিতাব নির্বাচন করুন —");
+  var groups = [];
 
-  bookSelect.appendChild(firstOption);
-
-  var groups = new Map();
-
-  books.forEach(function(book) {
-    if (!groups.has(book.group)) {
-      groups.set(book.group, []);
+  books.forEach(function (book) {
+    if (groups.indexOf(book.group) === -1) {
+      groups.push(book.group);
     }
-
-    groups.get(book.group).push(book);
   });
 
-  groups.forEach(function(groupBooks, groupName) {
+  groups.forEach(function (groupName) {
     var optgroup = document.createElement("optgroup");
-
     optgroup.label = decodeHtmlText(groupName);
 
-    groupBooks.forEach(function(book) {
-      var option = document.createElement("option");
+    books.forEach(function (book) {
+      if (book.group === groupName) {
+        var option = document.createElement("option");
 
-      option.value = book.slug;
-      option.textContent = decodeHtmlText(book.name);
+        option.value = book.slug;
+        option.textContent = decodeHtmlText(book.name);
 
-      optgroup.appendChild(option);
+        optgroup.appendChild(option);
+      }
     });
 
     bookSelect.appendChild(optgroup);
   });
-
-  chapterSelect.innerHTML = "";
-
-  var chapterOption = document.createElement("option");
-
-  chapterOption.value = "";
-  chapterOption.textContent =
-    decodeHtmlText("— প্রথমে কিতাব নির্বাচন করুন —");
-
-  chapterSelect.appendChild(chapterOption);
-
-  chapterSelect.disabled = true;
 }
 
 
-/* ===== ৮. অধ্যায়ের ড্রপডাউন তৈরি ===== */
+/* কিতাব নির্বাচন করলে অধ্যায়ের তালিকা তৈরি */
 
 function updateChapters() {
   var selectedSlug = bookSelect.value;
 
   chapterSelect.innerHTML = "";
 
-  var firstOption = document.createElement("option");
-
-  firstOption.value = "";
-
   if (!selectedSlug) {
-    firstOption.textContent =
-      decodeHtmlText("— প্রথমে কিতাব নির্বাচন করুন —");
-
-    chapterSelect.appendChild(firstOption);
-
     chapterSelect.disabled = true;
 
-    clearStatus();
+    var defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = decodeHtmlText("— প্রথমে কিতাব নির্বাচন করুন —");
 
+    chapterSelect.appendChild(defaultOption);
+
+    clearStatus();
     return;
   }
 
-  var selectedBook = books.find(function(book) {
+  var selectedBook = books.find(function (book) {
     return book.slug === selectedSlug;
   });
 
-  if (!selectedBook) return;
-
-  firstOption.textContent =
-    decodeHtmlText("— অধ্যায় নির্বাচন করুন —");
-
-  chapterSelect.appendChild(firstOption);
+  if (!selectedBook) {
+    return;
+  }
 
   chapterSelect.disabled = false;
+
+  var firstOption = document.createElement("option");
+  firstOption.value = "";
+  firstOption.textContent = decodeHtmlText("— অধ্যায় নির্বাচন করুন —");
+
+  chapterSelect.appendChild(firstOption);
 
   for (var i = 1; i <= selectedBook.chapters; i++) {
     var option = document.createElement("option");
 
     option.value = String(i);
-
-    option.textContent =
-      decodeHtmlText("অধ্যায় " + toBengaliDigits(i));
+    option.textContent = decodeHtmlText("অধ্যায় " + toBengaliDigits(i));
 
     chapterSelect.appendChild(option);
   }
@@ -196,322 +179,351 @@ function updateChapters() {
 }
 
 
-/* ===== ৯. অধ্যায়ের URL নির্ধারণ ===== */
+/* =====================================================
+   গুরুত্বপূর্ণ নোট ৪:
+   এই ফাংশনটি নির্বাচিত কিতাব ও অধ্যায়ের URL তৈরি করে।
+   {chapter} অংশের জায়গায় অধ্যায়ের নম্বর বসায়।
 
+   পদ নম্বর লিখলে URL-এর শেষে #verse-1, #verse-2
+   ইত্যাদি যুক্ত হয়।
+===================================================== */
+
+
+/* নির্বাচিত কিতাব ও অধ্যায়ের সম্পূর্ণ URL নির্ধারণ */
 function getChapterUrl(selectedBook, chapterNumber) {
-  var chapterKey = String(chapterNumber);
-
   if (selectedBook.chapterUrls &&
-      selectedBook.chapterUrls[chapterKey]) {
-    return selectedBook.chapterUrls[chapterKey];
+      selectedBook.chapterUrls[String(chapterNumber)]) {
+    return selectedBook.chapterUrls[String(chapterNumber)];
   }
 
-  if (!selectedBook.url) return "";
+  if (!selectedBook.url) {
+    return "";
+  }
 
-  return selectedBook.url.replace(
-    "{chapter}",
-    chapterKey
-  );
+  return selectedBook.url.replace("{chapter}", String(chapterNumber));
 }
 
 
-/* ===== ১০. Cache-এ অধ্যায় সংরক্ষণ ===== */
 
-function saveToCache(url, html) {
-  if (chapterCache.has(url)) {
-    chapterCache.delete(url);
-  }
-
-  chapterCache.set(url, html);
-
-  if (chapterCache.size > CACHE_LIMIT) {
-    var oldestKey = chapterCache.keys().next().value;
-
-    chapterCache.delete(oldestKey);
-  }
-}
-
-
-/* ===== ১১. অধ্যায়ের মূল লেখা সংগ্রহ ===== */
-
-function extractChapter(pageHtml) {
-  var parser = new DOMParser();
-
-  var pageDoc = parser.parseFromString(
-    pageHtml,
-    "text/html"
-  );
-
-  var sourceContent =
-    pageDoc.querySelector(".post-body") ||
-    pageDoc.querySelector(".entry-content") ||
-    pageDoc.querySelector(".post-body-container") ||
-    pageDoc.querySelector("article .post-body") ||
-    pageDoc.querySelector("article");
-
-  if (!sourceContent) {
-    throw new Error("অধ্যায়ের মূল লেখা খুঁজে পাওয়া যায়নি।");
-  }
-
-  var elements = sourceContent.querySelectorAll("h3, p");
-
-  var container = document.createElement("div");
-
-  var verseCount = 0;
-
-  elements.forEach(function(element) {
-    var isHeading = element.tagName === "H3";
-
-    var isVerse =
-      element.tagName === "P" &&
-      element.querySelector(".verse-number");
-
-    if (!isHeading && !isVerse) return;
-
-    var copy = element.cloneNode(true);
-
-    copy.querySelectorAll(
-      "script, style, iframe, form, button, input, select, textarea"
-    ).forEach(function(node) {
-      node.remove();
-    });
-
-    /* অপ্রয়োজনীয় event attribute বাদ */
-    var nodes = [copy].concat(
-      Array.from(copy.querySelectorAll("*"))
-    );
-
-    nodes.forEach(function(node) {
-      Array.from(node.attributes).forEach(function(attribute) {
-        if (/^on/i.test(attribute.name)) {
-          node.removeAttribute(attribute.name);
-        }
-      });
-    });
-
-    container.appendChild(copy);
-
-    if (isVerse) {
-      verseCount++;
-    }
-  });
-
-  if (verseCount === 0) {
-    throw new Error(
-      'এই পেইজে .verse-number ক্লাসযুক্ত পদ পাওয়া যায়নি।'
-    );
-  }
-
-  return container.innerHTML;
-}
-
-
-/* ===== ১২. অধ্যায়ের লেখা প্রদর্শন ===== */
-
-function renderChapter(html, verseNumber, currentRequest) {
-  if (currentRequest !== requestId) return;
-
-  readerContent.innerHTML = html;
-
-  clearStatus();
-
-  if (verseNumber) {
-    window.requestAnimationFrame(function() {
-      if (currentRequest !== requestId) return;
-
-      var verseNode = readerContent.querySelector(
-        '[id="verse-' + Number(verseNumber) + '"]'
-      );
-
-      if (verseNode) {
-        verseNode.classList.add("am-verse-highlight");
-
-        verseNode.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-
-      } else {
-        readerBox.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-        showStatus(
-          "অধ্যায়ের লেখা দেখানো হয়েছে, তবে নির্বাচিত পদটি পাওয়া যায়নি।"
-        );
-      }
-    });
-
-  } else {
-    readerBox.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }
-}
-
-
-/* ===== ১৩. একই পেইজে অধ্যায় লোড ===== */
-
+/* একই পেইজের মধ্যে অধ্যায়ের লেখা লোড */
 function loadChapter(selectedBook, chapterNumber, verseNumber) {
-  var targetUrl = getChapterUrl(
-    selectedBook,
-    chapterNumber
-  );
 
-  if (!/^https?:\/\/[^ ]+$/i.test(targetUrl) ||
-      targetUrl.indexOf("CHAPTER_") !== -1) {
-    showStatus(
-      "এই অধ্যায়ের URL সঠিক নয়। কিতাবের URL তালিকা পরীক্ষা করুন।"
-    );
+  /* প্রতিটি নতুন অনুরোধের জন্য আলাদা ID */
+  var currentRequest = ++requestId;
 
-    return;
-  }
-
-  var cleanUrl = targetUrl.split("#")[0];
-
-  /* আগের Fetch বাতিল */
+  /* আগের Fetch অনুরোধ চলমান থাকলে বাতিল */
   if (activeController) {
     activeController.abort();
+    activeController = null;
   }
 
-  activeController = null;
+  var targetUrl = getChapterUrl(selectedBook, chapterNumber);
 
-  var currentRequest = ++requestId;
+  if (!/^https?:\/\//i.test(targetUrl)) {
+    showStatus("\u098F\u0987 \u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 URL \u09B8\u09A0\u09BF\u0995 \u09A8\u09AF\u09BC\u0964 \u0995\u09BF\u09A4\u09BE\u09AC\u09C7\u09B0 URL \u09A4\u09BE\u09B2\u09BF\u0995\u09BE \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964");
+    return;
+  }
 
   readerBox.classList.add("am-reader-show");
 
   readerContent.innerHTML =
-    '<div class="am-reader-loading">অধ্যায়ের লেখা লোড হচ্ছে...</div>';
+    '<div class="am-reader-loading">\u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 \u09B2\u09C7\u0996\u09BE \u09B2\u09CB\u09A1 \u09B9\u099A\u09CD\u099B\u09C7...</div>';
 
   clearStatus();
+  updateNavigationButtons(selectedBook, chapterNumber);
 
-  updateNavigationButtons(
-    selectedBook,
-    chapterNumber
-  );
+  var cleanUrl = targetUrl.split("#")[0];
 
-  /* Cache-এ থাকলে সরাসরি প্রদর্শন */
+
+  /* ===== অধ্যায়ের লেখা প্রদর্শনের ফাংশন ===== */
+
+  function displayChapter(chapterHtml) {
+
+    /* পুরোনো অনুরোধের ফলাফল প্রদর্শন করা হবে না */
+    if (currentRequest !== requestId) {
+      return;
+    }
+
+    readerContent.innerHTML = "";
+
+    var verseContainer = document.createElement("div");
+    verseContainer.innerHTML = chapterHtml;
+
+    readerContent.appendChild(verseContainer);
+
+
+    /* পদ নম্বর দিলে সেই পদের কাছে নিয়ে যাবে */
+
+    if (verseNumber) {
+
+      window.setTimeout(function() {
+
+        /* এর মধ্যে নতুন অধ্যায় খোলা হলে পুরোনো Scroll বন্ধ */
+        if (currentRequest !== requestId) {
+          return;
+        }
+
+        var verseNode = readerContent.querySelector(
+          '[id="verse-' + Number(verseNumber) + '"]'
+        );
+
+        if (verseNode) {
+
+          verseNode.classList.add("am-verse-highlight");
+
+          verseNode.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+          });
+
+        } else {
+
+          readerBox.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+
+          showStatus(
+            "\u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 \u09AC\u09BE\u0995\u09CD\u09AF\u0997\u09C1\u09B2\u09CB \u09A6\u09C7\u0996\u09BE\u09A8\u09CB \u09B9\u09AF\u09BC\u09C7\u099B\u09C7, \u09A4\u09AC\u09C7 \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09BF\u09A4 \u09AA\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF id=\"verse-" +
+            Number(verseNumber) +
+            "\" \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u09A8\u09BF\u0964"
+          );
+
+        }
+
+      }, 100);
+
+    } else {
+
+      readerBox.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+
+  }
+
+
+  /* ===== আগে খোলা অধ্যায় Cache-এ থাকলে সরাসরি দেখানো ===== */
+
   if (chapterCache.has(cleanUrl)) {
+
     var cachedHtml = chapterCache.get(cleanUrl);
 
-    /* ব্যবহৃত Cache-কে সর্বশেষ অবস্থানে রাখা */
+    /* সর্বশেষ ব্যবহৃত অধ্যায় হিসেবে Cache-এর শেষে রাখা */
     chapterCache.delete(cleanUrl);
-
     chapterCache.set(cleanUrl, cachedHtml);
 
-    renderChapter(
-      cachedHtml,
-      verseNumber,
-      currentRequest
-    );
+    displayChapter(cachedHtml);
 
     return;
   }
+
+
+  /* ===== নতুন অধ্যায় Fetch করা ===== */
 
   if ("AbortController" in window) {
     activeController = new AbortController();
   }
 
   var fetchOptions = {
-    method: "GET",
-    credentials: "same-origin"
+    method:"GET",
+    credentials:"same-origin"
   };
 
   if (activeController) {
     fetchOptions.signal = activeController.signal;
   }
 
+
   fetch(cleanUrl, fetchOptions)
 
-    .then(function(response) {
-      if (!response.ok) {
-        throw new Error(
-          "পৃষ্ঠা পাওয়া যায়নি (" + response.status + ")"
-        );
+  .then(function(response) {
+
+    if (!response.ok) {
+      throw new Error(
+        "\u09AA\u09C3\u09B7\u09CD\u09A0\u09BE \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u09A8\u09BF (" +
+        response.status +
+        ")"
+      );
+    }
+
+    return response.text();
+
+  })
+
+  .then(function(pageHtml) {
+
+    /* নতুন অনুরোধ এসে থাকলে পুরোনো ফলাফল বাদ */
+    if (currentRequest !== requestId) {
+      return;
+    }
+
+    var parser = new DOMParser();
+
+    var pageDoc = parser.parseFromString(
+      pageHtml,
+      "text/html"
+    );
+
+    var sourceContent =
+      pageDoc.querySelector(".post-body") ||
+      pageDoc.querySelector(".entry-content") ||
+      pageDoc.querySelector(".post-body-container") ||
+      pageDoc.querySelector("article .post-body") ||
+      pageDoc.querySelector("article");
+
+    if (!sourceContent) {
+      throw new Error(
+        "\u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 \u09AE\u09C2\u09B2 \u09B2\u09C7\u0996\u09BE \u0996\u09C1\u0981\u099C\u09C7 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u09A8\u09BF\u0964"
+      );
+    }
+
+
+    /*
+      মূল অধ্যায়ের h3 টাইটেল ও পদগুলো সংগ্রহ করা হবে।
+      টাইটেল এবং পদ যে ক্রমে আছে, সেই ক্রমেই দেখানো হবে।
+      মেনু, লেখক পরিচিতি, ফুটার বা অন্য লেখা দেখানো হবে না।
+    */
+
+    var contentElements = sourceContent.querySelectorAll("h3, p");
+
+    var verseContainer = document.createElement("div");
+
+    var verseCount = 0;
+
+    contentElements.forEach(function(element) {
+
+      /* টাইটেল বা সাব-টাইটেল */
+      if (element.tagName === "H3") {
+
+        var headingCopy = element.cloneNode(true);
+
+        headingCopy.querySelectorAll(
+          "script,style,iframe,form,button,input,select,textarea"
+        ).forEach(function(node) {
+          node.remove();
+        });
+
+        verseContainer.appendChild(headingCopy);
       }
 
-      return response.text();
-    })
+      /* পদ বা আয়াত */
+      else if (
+        element.tagName === "P" &&
+        element.querySelector(".verse-number")
+      ) {
 
-    .then(function(pageHtml) {
-      if (currentRequest !== requestId) return;
+        var verseCopy = element.cloneNode(true);
 
-      var chapterHtml = extractChapter(pageHtml);
+        /* নিরাপত্তা ও অপ্রয়োজনীয় উপাদান বাদ */
+        verseCopy.querySelectorAll(
+          "script,style,iframe,form,button,input,select,textarea"
+        ).forEach(function(node) {
+          node.remove();
+        });
 
-      saveToCache(cleanUrl, chapterHtml);
+        verseContainer.appendChild(verseCopy);
 
-      renderChapter(
-        chapterHtml,
-        verseNumber,
-        currentRequest
-      );
-    })
+        verseCount++;
+      }
 
-    .catch(function(error) {
-      if (currentRequest !== requestId) return;
-
-      if (error.name === "AbortError") return;
-
-      readerContent.innerHTML =
-        '<div class="am-reader-error">' +
-        'এই অধ্যায়ের মূল পদগুলো লোড করা যায়নি।<br>' +
-        'অধ্যায়ের URL এবং প্রতিটি পদের ' +
-        '<b>verse-number</b> ক্লাস পরীক্ষা করুন।<br><br>' +
-        '<a href="' +
-        cleanUrl.replace(/&/g, "&amp;").replace(/"/g, "&quot;") +
-        '" target="_blank" rel="noopener">' +
-        'অধ্যায়টি আলাদা পেইজে খুলুন</a>' +
-        '</div>';
-
-      showStatus(error.message);
-
-      readerBox.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
     });
+
+
+    if (verseCount === 0) {
+      throw new Error(
+        "\u098F\u0987 \u09AA\u09C7\u0987\u099C\u09C7 .verse-number \u0995\u09CD\u09B2\u09BE\u09B8\u09AF\u09C1\u0995\u09CD\u09A4 \u09AA\u09A6 \u09AA\u09BE\u0993\u09AF\u09BC\u09BE \u09AF\u09BE\u09AF\u09BC\u09A8\u09BF\u0964 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u09AA\u09A6\u09C7\u09B0 span-\u098F class=\"verse-number\" \u0986\u099B\u09C7 \u0995\u09BF \u09A8\u09BE \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964"
+      );
+    }
+
+
+    /* ===== Cache-এ অধ্যায়ের HTML সংরক্ষণ ===== */
+
+    var chapterHtml = verseContainer.innerHTML;
+
+    chapterCache.set(cleanUrl, chapterHtml);
+
+
+    /* Cache সর্বোচ্চ ৮টি অধ্যায়ে সীমাবদ্ধ রাখা */
+
+    if (chapterCache.size > CACHE_LIMIT) {
+
+      var oldestKey = chapterCache.keys().next().value;
+
+      chapterCache.delete(oldestKey);
+
+    }
+
+
+    /* অধ্যায়ের লেখা প্রদর্শন */
+
+    displayChapter(chapterHtml);
+
+  })
+
+  .catch(function(error) {
+
+    /* নতুন অনুরোধের কারণে পুরোনো Error দেখানো হবে না */
+    if (currentRequest !== requestId) {
+      return;
+    }
+
+    /* Fetch বাতিল হলে Error দেখানোর প্রয়োজন নেই */
+    if (error.name === "AbortError") {
+      return;
+    }
+
+    readerContent.innerHTML =
+      '<div class="am-reader-error">' +
+      '\u098F\u0987 \u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 \u09B6\u09C1\u09A7\u09C1 \u09AE\u09C2\u09B2 \u09AA\u09A6\u0997\u09C1\u09B2\u09CB \u09B2\u09CB\u09A1 \u0995\u09B0\u09BE \u09AF\u09BE\u09AF\u09BC\u09A8\u09BF\u0964<br>' +
+      '\u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 URL \u098F\u09AC\u0982 \u09AA\u09CD\u09B0\u09A4\u09BF\u099F\u09BF \u09AA\u09A6\u09C7\u09B0 <b>verse-number</b> \u0995\u09CD\u09B2\u09BE\u09B8 \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964<br><br>' +
+      '<a href="' +
+      cleanUrl.replace(/&/g, "&amp;").replace(/"/g, "&quot;") +
+      '" target="_blank" rel="noopener">\u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u099F\u09BF \u0986\u09B2\u09BE\u09A6\u09BE \u09AA\u09C7\u0987\u099C\u09C7 \u0996\u09C1\u09B2\u09C1\u09A8</a>' +
+      '</div>';
+
+    readerBox.classList.add("am-reader-show");
+
+    readerBox.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+    showStatus(error.message);
+
+  });
+
 }
 
-
-/* ===== ১৪. আগের ও পরের অধ্যায়ের বাটন ===== */
-
+/* আগের ও পরের অধ্যায়ের বাটনের অবস্থা নির্ধারণ */
 function updateNavigationButtons(selectedBook, chapterNumber) {
   var bookIndex = books.findIndex(function(book) {
     return book.slug === selectedBook.slug;
   });
 
-  var atFirst =
-    bookIndex === 0 &&
-    chapterNumber === 1;
+  var atFirst = bookIndex === 0 && chapterNumber === 1;
+  var atLast = bookIndex === books.length - 1 &&
+               chapterNumber === selectedBook.chapters;
 
-  var atLast =
-    bookIndex === books.length - 1 &&
-    chapterNumber === selectedBook.chapters;
-
-  readerBox.querySelectorAll(
-    '[data-am-direction="-1"]'
-  ).forEach(function(button) {
-    button.disabled = atFirst;
+  readerBox.querySelectorAll('[data-am-direction="-1"]').forEach(function(btn) {
+    btn.disabled = atFirst;
   });
 
-  readerBox.querySelectorAll(
-    '[data-am-direction="1"]'
-  ).forEach(function(button) {
-    button.disabled = atLast;
+  readerBox.querySelectorAll('[data-am-direction="1"]').forEach(function(btn) {
+    btn.disabled = atLast;
   });
 }
 
-
-/* ===== ১৫. আগের ও পরের অধ্যায়ে যাওয়া ===== */
-
+/* আগের/পরের অধ্যায়ে একই পেইজে যাওয়া; প্রয়োজনে পরের কিতাবে প্রবেশ */
 function moveChapter(direction) {
   var currentSlug = bookSelect.value;
-
   var currentChapter = Number(chapterSelect.value);
 
-  if (!currentSlug || !currentChapter) return;
+  if (!currentSlug || !currentChapter) {
+    return;
+  }
 
   var bookIndex = books.findIndex(function(book) {
     return book.slug === currentSlug;
@@ -520,78 +532,52 @@ function moveChapter(direction) {
   if (bookIndex < 0) return;
 
   var targetBook = books[bookIndex];
-
   var targetChapter = currentChapter + direction;
 
   if (targetChapter < 1) {
     if (bookIndex === 0) return;
-
     targetBook = books[bookIndex - 1];
-
     targetChapter = targetBook.chapters;
-
   } else if (targetChapter > targetBook.chapters) {
     if (bookIndex >= books.length - 1) return;
-
     targetBook = books[bookIndex + 1];
-
     targetChapter = 1;
   }
 
   bookSelect.value = targetBook.slug;
-
   updateChapters();
-
   chapterSelect.value = String(targetChapter);
-
   verseInput.value = "";
 
-  loadChapter(
-    targetBook,
-    targetChapter,
-    ""
-  );
+  loadChapter(targetBook, targetChapter, "");
 }
-
-
-/* ===== ১৬. পাঠ শুরু করুন বাটন ===== */
 
 function openChapter() {
   var bookSlug = bookSelect.value;
-
   var chapterValue = chapterSelect.value;
-
-  var verseValue = toEnglishDigits(
-    verseInput.value.trim()
-  );
+  var verseValue = toEnglishDigits(verseInput.value.trim());
 
   if (!bookSlug) {
-    showStatus("প্রথমে একটি কিতাব নির্বাচন করুন.");
-
+    showStatus("\u09AA\u09CD\u09B0\u09A5\u09AE\u09C7 \u098F\u0995\u099F\u09BF \u0995\u09BF\u09A4\u09BE\u09AC \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09A8 \u0995\u09B0\u09C1\u09A8\u0964");
     bookSelect.focus();
-
     return;
   }
 
   if (!chapterValue) {
-    showStatus("অনুগ্রহ করে একটি অধ্যায় নির্বাচন করুন।");
-
+    showStatus("\u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u098F\u0995\u099F\u09BF \u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC \u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09A8 \u0995\u09B0\u09C1\u09A8\u0964");
     chapterSelect.focus();
-
     return;
   }
 
-  if (verseValue !== "" &&
-      (!/^[0-9]+$/.test(verseValue) ||
-       Number(verseValue) < 1)) {
-    showStatus("সঠিক পদ নম্বর লিখুন।");
-
-    verseInput.focus();
-
-    return;
+  if (verseValue !== "") {
+    if (!/^[0-9]+$/.test(verseValue) || Number(verseValue) < 1) {
+      showStatus("\u09B8\u09A0\u09BF\u0995 \u09AA\u09A6 \u09A8\u09AE\u09CD\u09AC\u09B0 \u09B2\u09BF\u0996\u09C1\u09A8\u0964");
+      verseInput.focus();
+      return;
+    }
   }
 
-  var selectedBook = books.find(function(book) {
+  var selectedBook = books.find(function (book) {
     return book.slug === bookSlug;
   });
 
@@ -600,52 +586,80 @@ function openChapter() {
   if (!selectedBook ||
       chapterNumber < 1 ||
       chapterNumber > selectedBook.chapters) {
-    showStatus("নির্বাচিত অধ্যায়ের তথ্য সঠিক নয়।");
-
+    showStatus("\u09A8\u09BF\u09B0\u09CD\u09AC\u09BE\u099A\u09BF\u09A4 \u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 \u09A4\u09A5\u09CD\u09AF \u09B8\u09A0\u09BF\u0995 \u09A8\u09AF\u09BC\u0964");
     return;
   }
 
-  loadChapter(
-    selectedBook,
-    chapterNumber,
-    verseValue
-  );
+  /*
+   * এখানে সম্পূর্ণ URL তৈরি হচ্ছে।
+   * {chapter} এর জায়গায় অধ্যায়ের নম্বর বসবে।
+   */
+
+  /*
+   * প্রথমে chapterUrls-এ নির্দিষ্ট অধ্যায়ের আলাদা URL আছে কি না দেখা হবে।
+   * থাকলে সেটি ব্যবহার হবে; না থাকলে url-এর {chapter} বদলে URL তৈরি হবে।
+   *
+   * উদাহরণ:
+   * chapterUrls:{"1":"https://.../blog-page_504.html"}
+   * url:"https://.../genesis-{chapter}.html"
+   */
+  var targetUrl = "";
+
+  if (selectedBook.chapterUrls && selectedBook.chapterUrls[String(chapterNumber)]) {
+    targetUrl = selectedBook.chapterUrls[String(chapterNumber)];
+  } else {
+    targetUrl = selectedBook.url.replace(
+      "{chapter}",
+      String(chapterNumber)
+    );
+  }
+
+  if (!/^https?:\/\//i.test(targetUrl)) {
+    showStatus("\u098F\u0987 \u0985\u09A7\u09CD\u09AF\u09BE\u09AF\u09BC\u09C7\u09B0 URL \u09B8\u09A0\u09BF\u0995 \u09A8\u09AF\u09BC\u0964 books \u09A4\u09BE\u09B2\u09BF\u0995\u09BE\u09AF\u09BC URL \u09AA\u09B0\u09C0\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C1\u09A8\u0964");
+    return;
+  }
+
+  /*
+   * পদ নম্বর দেওয়া থাকলে পদে যাওয়ার লিংক যুক্ত হবে।
+   */
+
+  if (verseValue !== "") {
+    targetUrl += "#verse-" + Number(verseValue);
+  }
+
+  /*
+   * অন্য পেইজে না গিয়ে একই মাস্টার পেইজের নিচে অধ্যায় দেখানো হবে।
+   */
+  loadChapter(selectedBook, chapterNumber, verseValue);
 }
 
 
-/* ===== ১৭. বাটন ও ড্রপডাউন নিয়ন্ত্রণ ===== */
+/* =====================================================
+   গুরুত্বপূর্ণ নোট ৫:
+   নিচের অংশে বাটন ও ড্রপডাউন কাজ করার নির্দেশ দেওয়া আছে।
+   সাধারণত এই অংশ পরিবর্তন করার প্রয়োজন নেই।
+===================================================== */
 
-bookSelect.addEventListener(
-  "change",
-  updateChapters
-);
+bookSelect.addEventListener("change", updateChapters);
 
-readButton.addEventListener(
-  "click",
-  openChapter
-);
+readButton.addEventListener("click", openChapter);
 
-readerBox.querySelectorAll(
-  "[data-am-direction]"
-).forEach(function(button) {
+/* উপরে ও নিচে থাকা আগের/পরের অধ্যায়ের অ্যারো বাটন */
+readerBox.querySelectorAll("[data-am-direction]").forEach(function(button) {
   button.addEventListener("click", function() {
-    moveChapter(
-      Number(button.getAttribute("data-am-direction"))
-    );
+    moveChapter(Number(button.getAttribute("data-am-direction")));
   });
 });
 
-verseInput.addEventListener(
-  "keydown",
-  function(event) {
-    if (event.key === "Enter") {
-      openChapter();
-    }
+verseInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    openChapter();
   }
-);
+});
 
 
-/* ===== ১৮. পেইজ চালু হলে কিতাব দেখানো ===== */
+/* পেইজ চালু হলে কিতাবের তালিকা তৈরি হবে */
 
 populateBooks();
 
+})();
