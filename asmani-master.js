@@ -1,3 +1,586 @@
+(function () {
+"use strict";
+
+/* =====================================================
+   গুরুত্বপূর্ণ নোট ১:
+   নিচের তালিকায় প্রতিটি কিতাবের নাম, অধ্যায়সংখ্যা
+   এবং সম্পূর্ণ URL দেওয়া হয়েছে।
+
+   URL-এর শেষে {chapter} লেখা অংশটি পরিবর্তন করবেন না,
+   যদি নিচের স্বয়ংক্রিয় URL তৈরির নিয়ম ব্যবহার করেন।
+
+   উদাহরণ (শুধু তখনই কাজ করবে, যদি Blogger Custom Permalink-ও এভাবে হয়):
+   genesis-{chapter}.html
+
+   অধ্যায় ১ হলে:
+   https://divineword4u.blogspot.com/p/genesis-1.html
+
+   অধ্যায় ২ হলে:
+   https://divineword4u.blogspot.com/p/genesis-2.html
+
+   আপনার Blogger পেইজের প্রকৃত URL আলাদা হলে,
+   সংশ্লিষ্ট কিতাবের url-এর ঠিকানাটি পরিবর্তন করবেন।
+
+   সৃষ্টির ইতিহাসের ১ম ও ২য় অধ্যায়ের আপনার দেওয়া
+   প্রকৃত URL chapterUrls তালিকায় রাখা হয়েছে।
+
+   কোনো অধ্যায়ের URL অন্যরকম হলে সেই কিতাবের object-এর
+   ভেতরে chapterUrls যোগ করে অধ্যায় নম্বর অনুযায়ী URL দিন।
+   উদাহরণ:
+   chapterUrls:{
+     "1":"https://divineword4u.blogspot.com/p/blog-page_504.html",
+     "2":"https://divineword4u.blogspot.com/p/blog-page_228.html",
+     "3":"https://divineword4u.blogspot.com/p/আপনার-তৃতীয়-অধ্যায়ের-লিংক.html"
+   }
+
+   একই কিতাবের জন্য একটিমাত্র object রাখবেন।
+   একই slug দিয়ে দ্বিতীয় object তৈরি করবেন না।
+===================================================== */
+
+var books = [
+
+  /* ========== তাওরাত শরীফ ========== */
+
+  {
+    group:"তাওরাত শরীফ",
+    name:"সৃষ্টির ইতিহাস",
+    slug:"genesis",
+    chapters:50,
+
+    /* সাধারণ URL-এর নিয়ম:
+       যেসব অধ্যায়ের আলাদা URL নিচে দেওয়া নেই,
+       সেগুলোর জন্য এই ঠিকানা ব্যবহার হবে। */
+    url:"https://divineword4u.blogspot.com/p/genesis-{chapter}.html",
+
+    /* সৃষ্টির ইতিহাসের প্রকাশিত অধ্যায়গুলোর প্রকৃত URL:
+       পরবর্তী অধ্যায়ের URL পেলে এখানে নতুন লাইন যোগ করবেন।
+       উদাহরণ:
+       "3":"https://divineword4u.blogspot.com/p/আপনার-তৃতীয়-অধ্যায়ের-লিংক.html"
+    */
+    chapterUrls:{
+      	"1":"https://divineword4u.blogspot.com/p/blog-page_504.html",
+    	"2":"https://divineword4u.blogspot.com/p/blog-page_228.html",
+     	"3":"https://divineword4u.blogspot.com/p/blog-page_797.html",
+		"4":"https://divineword4u.blogspot.com/p/blog-page_592.html",
+		"5":"https://divineword4u.blogspot.com/p/blog-page_13.html",
+        "6":"https://divineword4u.blogspot.com/p/blog-page_830.html",
+        "7":"https://divineword4u.blogspot.com/p/blog-page_216.html",
+        "8":"https://divineword4u.blogspot.com/p/blog-page_710.html",
+        "9":"https://divineword4u.blogspot.com/p/blog-page_71.html",
+        "10":"https://divineword4u.blogspot.com/p/blog-page_974.html",
+        "11":"https://divineword4u.blogspot.com/p/blog-page_831.html",
+        "12":"https://divineword4u.blogspot.com/p/blog-page_700.html",
+        "13":"https://divineword4u.blogspot.com/p/blog-page_624.html",
+        "14":"https://divineword4u.blogspot.com/p/blog-page_734.html",
+        "15":"https://divineword4u.blogspot.com/p/blog-page_287.html",
+        "16":"https://divineword4u.blogspot.com/p/blog-page_897.html",
+        "17":"https://divineword4u.blogspot.com/p/blog-page_655.html",
+        "18":"https://divineword4u.blogspot.com/p/blog-page_343.html",
+        "19":"https://divineword4u.blogspot.com/p/blog-page_428.html",
+        "20":"https://divineword4u.blogspot.com/p/blog-page_708.html",
+        "21":"https://divineword4u.blogspot.com/p/blog-page_324.html",
+        "22":"https://divineword4u.blogspot.com/p/blog-page_633.html",
+        "23":"https://divineword4u.blogspot.com/p/blog-page_281.html",
+        "24":"https://divineword4u.blogspot.com/p/blog-page_756.html",
+        "25":"https://divineword4u.blogspot.com/p/blog-page_623.html",
+        "26":"https://divineword4u.blogspot.com/p/blog-page_408.html",
+        "27":"https://divineword4u.blogspot.com/p/blog-page_255.html",
+        "28":"CHAPTER_28_URL",
+        "29":"CHAPTER_29_URL",
+        "30":"CHAPTER_30_URL",
+        "31":"CHAPTER_31_URL",
+        "32":"CHAPTER_32_URL",
+        "33":"CHAPTER_33_URL",
+        "34":"CHAPTER_34_URL",
+        "35":"CHAPTER_35_URL",
+        "36":"CHAPTER_36_URL",
+        "37":"CHAPTER_37_URL",
+        "38":"CHAPTER_38_URL",
+        "39":"CHAPTER_39_URL",
+        "40":"CHAPTER_40_URL",
+        "41":"CHAPTER_41_URL",
+        "42":"CHAPTER_42_URL",
+        "43":"CHAPTER_43_URL",
+        "44":"CHAPTER_44_URL",
+        "45":"CHAPTER_45_URL",
+        "46":"CHAPTER_46_URL",
+        "47":"CHAPTER_47_URL",
+        "48":"CHAPTER_48_URL",
+        "49":"CHAPTER_49_URL",
+        "50":"CHAPTER_50_URL"
+    }
+  },
+  
+  {
+    group:"তাওরাত শরীফ",
+    name:"যাত্রাপুস্তক",
+    slug:"exodus",
+    chapters:40,
+    url:"https://divineword4u.blogspot.com/p/exodus-{chapter}.html"
+  },
+  {
+    group:"তাওরাত শরীফ",
+    name:"লেবীয়",
+    slug:"leviticus",
+    chapters:27,
+    url:"https://divineword4u.blogspot.com/p/leviticus-{chapter}.html"
+  },
+  {
+    group:"তাওরাত শরীফ",
+    name:"শুমারী",
+    slug:"numbers",
+    chapters:36,
+    url:"https://divineword4u.blogspot.com/p/numbers-{chapter}.html"
+  },
+  {
+    group:"তাওরাত শরীফ",
+    name:"দ্বিতীয় বিবরণ",
+    slug:"deuteronomy",
+    chapters:34,
+    url:"https://divineword4u.blogspot.com/p/deuteronomy-{chapter}.html"
+  },
+
+  /* ========== নবীদের কিতাব ১ম অংশ ========== */
+
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"ইউসা",
+    slug:"joshua",
+    chapters:24,
+    url:"https://divineword4u.blogspot.com/p/joshua-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"কাজীগণ",
+    slug:"judges",
+    chapters:21,
+    url:"https://divineword4u.blogspot.com/p/judges-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"রূত",
+    slug:"ruth",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/ruth-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"১ম শামুয়েল",
+    slug:"1-samuel",
+    chapters:31,
+    url:"https://divineword4u.blogspot.com/p/1-samuel-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"২য় শামুয়েল",
+    slug:"2-samuel",
+    chapters:24,
+    url:"https://divineword4u.blogspot.com/p/2-samuel-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"১ম বাদশাহ্‌নামা",
+    slug:"1-kings",
+    chapters:22,
+    url:"https://divineword4u.blogspot.com/p/1-kings-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"২য় বাদশাহ্‌নামা",
+    slug:"2-kings",
+    chapters:25,
+    url:"https://divineword4u.blogspot.com/p/2-kings-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"১ম খান্দাননামা",
+    slug:"1-chronicles",
+    chapters:29,
+    url:"https://divineword4u.blogspot.com/p/1-chronicles-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"২য় খান্দাননামা",
+    slug:"2-chronicles",
+    chapters:36,
+    url:"https://divineword4u.blogspot.com/p/2-chronicles-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"উযায়ের",
+    slug:"ezra",
+    chapters:10,
+    url:"https://divineword4u.blogspot.com/p/ezra-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"নহিমিয়া",
+    slug:"nehemiah",
+    chapters:13,
+    url:"https://divineword4u.blogspot.com/p/nehemiah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ১ম অংশ",
+    name:"ইষ্টের",
+    slug:"esther",
+    chapters:10,
+    url:"https://divineword4u.blogspot.com/p/esther-{chapter}.html"
+  },
+
+  /* ========== যবুর শরীফ ========== */
+
+  {
+    group:"যবুর শরীফ",
+    name:"আইয়ুব",
+    slug:"job",
+    chapters:42,
+    url:"https://divineword4u.blogspot.com/p/job-{chapter}.html"
+  },
+  {
+    group:"যবুর শরীফ",
+    name:"জবুর",
+    slug:"psalms",
+    chapters:150,
+    url:"https://divineword4u.blogspot.com/p/psalms-{chapter}.html"
+  },
+  {
+    group:"যবুর শরীফ",
+    name:"মেসাল",
+    slug:"proverbs",
+    chapters:31,
+    url:"https://divineword4u.blogspot.com/p/proverbs-{chapter}.html"
+  },
+  {
+    group:"যবুর শরীফ",
+    name:"হেদায়েতকারী",
+    slug:"ecclesiastes",
+    chapters:12,
+    url:"https://divineword4u.blogspot.com/p/ecclesiastes-{chapter}.html"
+  },
+  {
+    group:"যবুর শরীফ",
+    name:"সোলায়মানের শীর",
+    slug:"song-of-solomon",
+    chapters:8,
+    url:"https://divineword4u.blogspot.com/p/song-of-solomon-{chapter}.html"
+  },
+
+  /* ========== নবীদের কিতাব ২য় অংশ ========== */
+
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"ইশাইয়া",
+    slug:"isaiah",
+    chapters:66,
+    url:"https://divineword4u.blogspot.com/p/isaiah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"ইয়ারমিয়া",
+    slug:"jeremiah",
+    chapters:52,
+    url:"https://divineword4u.blogspot.com/p/jeremiah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"বিলাপগাথা",
+    slug:"lamentations",
+    chapters:5,
+    url:"https://divineword4u.blogspot.com/p/lamentations-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"ইহিস্কেল",
+    slug:"ezekiel",
+    chapters:48,
+    url:"https://divineword4u.blogspot.com/p/ezekiel-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"দানিয়েল",
+    slug:"daniel",
+    chapters:12,
+    url:"https://divineword4u.blogspot.com/p/daniel-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"হোসিয়া",
+    slug:"hosea",
+    chapters:14,
+    url:"https://divineword4u.blogspot.com/p/hosea-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"যোয়েল",
+    slug:"joel",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/joel-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"আমোস",
+    slug:"amos",
+    chapters:9,
+    url:"https://divineword4u.blogspot.com/p/amos-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"ওবদিয়",
+    slug:"obadiah",
+    chapters:1,
+    url:"https://divineword4u.blogspot.com/p/obadiah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"ইউনুস",
+    slug:"jonah",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/jonah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"মিকাহ্‌",
+    slug:"micah",
+    chapters:7,
+    url:"https://divineword4u.blogspot.com/p/micah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"নাহূম",
+    slug:"nahum",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/nahum-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"হাবাক্কুক",
+    slug:"habakkuk",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/habakkuk-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"সফনিয়",
+    slug:"zephaniah",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/zephaniah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"হগয়",
+    slug:"haggai",
+    chapters:2,
+    url:"https://divineword4u.blogspot.com/p/haggai-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"জাকারিয়া",
+    slug:"zechariah",
+    chapters:14,
+    url:"https://divineword4u.blogspot.com/p/zechariah-{chapter}.html"
+  },
+  {
+    group:"নবীদের কিতাব ২য় অংশ",
+    name:"মালাখি",
+    slug:"malachi",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/malachi-{chapter}.html"
+  },
+
+  /* ========== ইঞ্জিল শরীফ========== */
+
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"মথি",
+    slug:"matthew",
+    chapters:28,
+    url:"https://divineword4u.blogspot.com/p/matthew-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"মার্ক",
+    slug:"mark",
+    chapters:16,
+    url:"https://divineword4u.blogspot.com/p/mark-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"লূক",
+    slug:"luke",
+    chapters:24,
+    url:"https://divineword4u.blogspot.com/p/luke-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ইউহোন্না",
+    slug:"john",
+    chapters:21,
+    url:"https://divineword4u.blogspot.com/p/john-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"প্রেরিত",
+    slug:"acts",
+    chapters:28,
+    url:"https://divineword4u.blogspot.com/p/acts-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"রোমীয়",
+    slug:"romans",
+    chapters:16,
+    url:"https://divineword4u.blogspot.com/p/romans-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"১ম করিন্থীয়",
+    slug:"1-corinthians",
+    chapters:16,
+    url:"https://divineword4u.blogspot.com/p/1-corinthians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"২য় করিন্থীয়",
+    slug:"2-corinthians",
+    chapters:13,
+    url:"https://divineword4u.blogspot.com/p/2-corinthians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"গালাতীয়",
+    slug:"galatians",
+    chapters:6,
+    url:"https://divineword4u.blogspot.com/p/galatians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ইফিষীয়",
+    slug:"ephesians",
+    chapters:6,
+    url:"https://divineword4u.blogspot.com/p/ephesians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ফিলিপীয়",
+    slug:"philippians",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/philippians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"কলসীয়",
+    slug:"colossians",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/colossians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"১ম থিষলনীকীয়",
+    slug:"1-thessalonians",
+    chapters:5,
+    url:"https://divineword4u.blogspot.com/p/1-thessalonians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"২য় থিষলনীকীয়",
+    slug:"2-thessalonians",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/2-thessalonians-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"১ম তীমথিয়",
+    slug:"1-timothy",
+    chapters:6,
+    url:"https://divineword4u.blogspot.com/p/1-timothy-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"২য় তীমথিয়",
+    slug:"2-timothy",
+    chapters:4,
+    url:"https://divineword4u.blogspot.com/p/2-timothy-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"তীত",
+    slug:"titus",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/titus-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ফিলীমন",
+    slug:"philemon",
+    chapters:1,
+    url:"https://divineword4u.blogspot.com/p/philemon-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ইবরানী",
+    slug:"hebrews",
+    chapters:13,
+    url:"https://divineword4u.blogspot.com/p/hebrews-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"ইয়াকুব",
+    slug:"james",
+    chapters:5,
+    url:"https://divineword4u.blogspot.com/p/james-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"১ম পিতর",
+    slug:"1-peter",
+    chapters:5,
+    url:"https://divineword4u.blogspot.com/p/1-peter-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"২য় পিতর",
+    slug:"2-peter",
+    chapters:3,
+    url:"https://divineword4u.blogspot.com/p/2-peter-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"১ম ইউহোন্না",
+    slug:"1-john",
+    chapters:5,
+    url:"https://divineword4u.blogspot.com/p/1-john-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"২য় ইউহোন্না",
+    slug:"2-john",
+    chapters:1,
+    url:"https://divineword4u.blogspot.com/p/2-john-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"৩য় ইউহোন্না",
+    slug:"3-john",
+    chapters:1,
+    url:"https://divineword4u.blogspot.com/p/3-john-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"এহুদা",
+    slug:"jude",
+    chapters:1,
+    url:"https://divineword4u.blogspot.com/p/jude-{chapter}.html"
+  },
+  {
+    group:"ইঞ্জিল শরীফ",
+    name:"প্রকাশিত কালাম",
+    slug:"revelation",
+    chapters:22,
+    url:"https://divineword4u.blogspot.com/p/revelation-{chapter}.html"
+  }
+
+];
+
 var bookSelect = document.getElementById("am-book");
 var chapterSelect = document.getElementById("am-chapter");
 var verseInput = document.getElementById("am-verse");
