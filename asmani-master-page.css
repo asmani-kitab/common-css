@@ -4,7 +4,7 @@
 #am-master-page .am-header{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;text-align:center;padding:32px 2px 28px;border-bottom:4px solid var(--gold)}
 #am-master-page .am-header h2{color:#fff;font-size:clamp(24px,5vw,34px);line-height:1.5;margin:0 0 8px;font-weight:700}
 #am-master-page .am-header p{color:#e5eee9;font-size:16px;line-height:1.8;margin:0}
-#am-master-page .am-content{padding:24px 2px 24px}
+#am-master-page .am-content{padding:12px 2px 12px}
 #am-master-page .am-intro{text-align:center;color:var(--muted);font-size:16px;line-height:1.9;margin:0 auto 24px;max-width:650px}
 #am-master-page .am-field{margin-bottom:19px}
 #am-master-page .am-field label{display:block;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--green)}
