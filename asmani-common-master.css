@@ -24,7 +24,7 @@
 .bible-master .chapter-grid a.current-chapter{background:var(--ak-primary);color:#ffffff!important;border-color:var(--ak-primary)}
 .bible-master .scripture-categories{margin-top:28px;padding:20px 5px;border-top:2px solid var(--ak-primary);border-bottom:1px solid var(--ak-border)}
 .bible-master .scripture-categories h3{margin:0 0 15px;text-align:center;color:var(--ak-primary);font-family:var(--ak-font);font-size:20px;font-weight:700}
-.bible-master .category-buttons{display:grid;grid-template-columns:repeat(4,minmax(4,1fr));width:100%;gap:8px}
+.bible-master .category-buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:8px}
 .bible-master .category-buttons a{display:flex;align-items:center;justify-content:center;min-height:48px;padding:7px 4px;background:var(--ak-primary);color:#ffffff!important;border:1px solid var(--ak-primary);border-radius:6px;font-family:var(--ak-font);font-size:16px;font-weight:600;line-height:1.5;text-decoration:none!important;text-align:center}
 .bible-master .category-buttons a:hover{background:var(--ak-primary-dark);color:#ffffff!important}
 .bible-master .bible-footer{margin-top:20px;padding:12px 5px 5px;border-top:1px solid var(--ak-border);color:var(--ak-muted);font-family:var(--ak-font);font-size:16px;text-align:center}
