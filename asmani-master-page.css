@@ -20,7 +20,7 @@
 #am-master-page .am-links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:25px}
 #am-master-page .am-links a{display:block;text-align:center;text-decoration:none;color:var(--green);background:#eaf2ee;border:1px solid var(--border);border-radius:9px;padding:11px 2px;font-size:16px;font-weight:700;transition:.2s ease}
 #am-master-page .am-links a:hover{background:var(--green);color:#fff}
-#am-master-page .am-footer-note{text-align:center;color:var(--muted);font-size:16px;line-height:1.8;margin:22px 0 0}
+#am-master-page .am-footer-note{text-align:center;color:var(--muted);font-size:14px;line-height:1.8;margin:22px 0 0}
 #am-master-page .am-reader{display:none;margin-top:26px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 7px 24px rgba(23,62,54,.06)}
 #am-master-page .am-reader.am-reader-show{display:block}
 #am-master-page .am-reader-head{padding:17px 2px;background:#f2f6f3;border-bottom:1px solid var(--border);text-align:center}
@@ -31,7 +31,7 @@
 #am-master-page .am-nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border:1px solid #cbd8d0;border-radius:50%;background:#fff;color:var(--green);font-family:Arial,sans-serif;font-size:25px;line-height:1;font-weight:700;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
 #am-master-page .am-nav-btn:hover:not(:disabled){background:var(--green);color:#fff;border-color:var(--green)}
 #am-master-page .am-nav-btn:disabled{opacity:.35;cursor:not-allowed}
-#am-master-page .am-reader-content{padding:25px 2px 30px;color:#26332e;font-size:18px;line-height:2;overflow-wrap:anywhere}
+#am-master-page .am-reader-content{padding:25px 2px 30px;color:#26332e;font-size:20px;line-height:2;overflow-wrap:anywhere}
 #am-master-page .am-reader-content h1,#am-master-page .am-reader-content h2,#am-master-page .am-reader-content h3,#am-master-page .am-reader-content h4{color:var(--green);line-height:1.7;margin:1.2em 0 .65em}
 #am-master-page .am-reader-content h1:first-child,#am-master-page .am-reader-content h2:first-child,#am-master-page .am-reader-content h3:first-child{margin-top:0}
 #am-master-page .am-reader-content p{margin:0 0 11px;line-height:2}
