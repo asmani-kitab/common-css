@@ -1,4 +1,4 @@
-#am-master-page{--am-primary:#17432f;--am-accent:#674ea7;--am-soft:#f3effa;--am-text:#303044;--am-muted:#6b6878;--am-border:#e7e1ef;width:100%;max-width:100%;margin:20px auto;padding:0 12px;box-sizing:border-box;font-family:'Noto Serif Bengali',serif;color:var(--am-text);line-height:1.75}
+#am-master-page{--am-primary:#17432f;--am-accent:#674ea7;--am-soft:#f3effa;--am-text:#303044;--am-muted:#6b6878;--am-border:#e7e1ef;width:100%;max-width:100%;margin:0;padding:0;box-sizing:border-box;font-family:'Noto Serif Bengali',serif;color:var(--am-text);line-height:1.75}
 #am-master-page *{box-sizing:border-box}
 #am-master-page .am-panel{background:#fff;border:1px solid var(--am-border);border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(32,18,77,.06)}
 #am-master-page .am-header{padding:24px 16px;text-align:center;background:var(--am-primary);color:#fff}
@@ -34,4 +34,4 @@
 #am-master-page .am-links a{display:block;padding:11px 8px;border-radius:8px;background:var(--am-soft);color:var(--am-primary);text-align:center;text-decoration:none;font-weight:700}
 #am-master-page .am-links a:hover{background:var(--am-accent);color:#fff}
 #am-master-page .am-footer-note{margin:18px 0 0;color:var(--am-muted);font-size:14px;text-align:center}
-@media(max-width:600px){#am-master-page{padding:0 8px;margin:12px auto}#am-master-page .am-content{padding:14px}#am-master-page .am-header{padding:20px 12px}#am-master-page .am-header h2{font-size:23px}#am-master-page .am-row{display:block}#am-master-page .am-reader{padding:12px}#am-master-page .am-reader-content{font-size:22px}#am-master-page .am-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#am-master-page{width:100%;max-width:100%;padding:0;margin:0}#am-master-page .am-content{padding:14px}#am-master-page .am-header{padding:20px 12px}#am-master-page .am-header h2{font-size:23px}#am-master-page .am-row{display:block}#am-master-page .am-reader{padding:12px}#am-master-page .am-reader-content{font-size:22px}#am-master-page .am-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
