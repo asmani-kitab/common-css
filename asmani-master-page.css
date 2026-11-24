@@ -1,73 +1,37 @@
 #am-master-page{--am-primary:#17432f;--am-accent:#674ea7;--am-soft:#f3effa;--am-text:#303044;--am-muted:#6b6878;--am-border:#e7e1ef;max-width:900px;margin:20px auto;padding:0 12px;box-sizing:border-box;font-family:'Noto Serif Bengali',serif;color:var(--am-text);line-height:1.75}
-
 #am-master-page *{box-sizing:border-box}
-
 #am-master-page .am-panel{background:#fff;border:1px solid var(--am-border);border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(32,18,77,.06)}
-
 #am-master-page .am-header{padding:24px 16px;text-align:center;background:var(--am-primary);color:#fff}
-
 #am-master-page .am-header h2{margin:0 0 8px;font-size:28px;line-height:1.5}
-
 #am-master-page .am-header p{margin:2px 0;font-size:16px}
-
 #am-master-page .am-content{padding:20px}
-
 #am-master-page .am-intro{margin:0 0 18px;color:var(--am-muted)}
-
 #am-master-page .am-field{min-width:0;margin:0 0 15px;flex:1}
-
 #am-master-page .am-field label{display:block;margin:0 0 7px;font-weight:700}
-
 #am-master-page select,#am-master-page input{display:block;width:100%;min-height:46px;padding:10px 12px;border:1px solid #d8d1e3;border-radius:8px;background:#fff;color:var(--am-text);font:inherit;font-size:16px}
-
 #am-master-page select:focus,#am-master-page input:focus{outline:2px solid #b9a6df;outline-offset:1px}
-
 #am-master-page .am-row{display:flex;gap:14px}
-
 #am-master-page .am-help{display:block;margin-top:5px;color:var(--am-muted);font-size:13px}
-
 #am-master-page .am-button{display:block;width:100%;min-height:48px;padding:11px 18px;border:0;border-radius:8px;background:var(--am-primary);color:#fff;font:inherit;font-size:18px;font-weight:700;cursor:pointer}
-
 #am-master-page .am-button:hover{background:var(--am-accent)}
-
 #am-master-page .am-button:disabled,#am-master-page .am-nav-btn:disabled{opacity:.45;cursor:not-allowed}
-
 #am-master-page .am-status{display:none;margin:14px 0;padding:11px 13px;border:1px solid #e8caca;border-radius:8px;background:#fff5f5;color:#8b2020;overflow-wrap:anywhere}
-
 #am-master-page .am-status.am-show{display:block}
-
 #am-master-page .am-reader{display:none;margin-top:20px;padding:16px;border:1px solid var(--am-border);border-radius:10px;background:#fff}
-
 #am-master-page .am-reader.am-reader-show{display:block}
-
 #am-master-page .am-chapter-nav{display:flex;justify-content:center;align-items:center;gap:18px;margin:0 0 14px}
-
 #am-master-page .am-bottom-nav{margin:18px 0 0}
-
 #am-master-page .am-nav-btn{width:44px;height:42px;border:0;border-radius:7px;background:var(--am-soft);color:var(--am-primary);font-size:24px;cursor:pointer}
-
 #am-master-page .am-nav-btn:hover:not(:disabled){background:var(--am-accent);color:#fff}
-
 #am-master-page .am-reader-content{font-size:22px;line-height:2;text-align:justify;overflow-wrap:anywhere}
-
 #am-master-page .am-reader-content h3{margin:20px 0 10px;color:var(--am-primary);font-size:21px;line-height:1.6}
-
 #am-master-page .am-reader-content p{margin:0 0 12px}
-
 #am-master-page .am-reader-content .verse-number{font-weight:700;color:#8b0000}
-
 #am-master-page .am-reader-content .am-verse-highlight{padding:8px 10px;border-left:3px solid var(--am-accent);border-radius:4px;background:var(--am-soft)}
-
 #am-master-page .am-reader-loading,#am-master-page .am-reader-error{padding:14px;border-radius:8px;background:var(--am-soft);color:var(--am-primary)}
-
 #am-master-page .am-reader-error a{color:var(--am-accent);font-weight:700}
-
 #am-master-page .am-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:20px 0}
-
 #am-master-page .am-links a{display:block;padding:11px 8px;border-radius:8px;background:var(--am-soft);color:var(--am-primary);text-align:center;text-decoration:none;font-weight:700}
-
 #am-master-page .am-links a:hover{background:var(--am-accent);color:#fff}
-
 #am-master-page .am-footer-note{margin:18px 0 0;color:var(--am-muted);font-size:14px;text-align:center}
-
 @media(max-width:600px){#am-master-page{padding:0 8px;margin:12px auto}#am-master-page .am-content{padding:14px}#am-master-page .am-header{padding:20px 12px}#am-master-page .am-header h2{font-size:23px}#am-master-page .am-row{display:block}#am-master-page .am-reader{padding:12px}#am-master-page .am-reader-content{font-size:22px}#am-master-page .am-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
